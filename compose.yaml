@@ -10,15 +10,16 @@ services:
     depends_on:
       - postgres
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5433/music
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/music
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=2242
 
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:18.4'
     container_name: postgres
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=2242
       - POSTGRES_DB=music
-      - PGPORT=5433
+    ports:
+      - 5432:5432
