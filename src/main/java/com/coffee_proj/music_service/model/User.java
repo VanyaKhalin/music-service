@@ -15,11 +15,11 @@ public class User {
     public User() {
     }
 
-    public static User toModel (UserEntity user) {
+    public static User fromEntyity(UserEntity user) {
         User model = new User();
         model.setId(user.getId());
         model.setUsername(user.getUsername());
-        model.setMusic(user.getUsersMusic().stream().map(Music::toModel).collect(Collectors.toList()));
+        model.setMusic(user.getUsersMusic().stream().map(Music::fromEntyityl).collect(Collectors.toList()));
         return model;
     }
 

@@ -9,7 +9,7 @@ public class Music {
     public Music() {
     }
 
-    public static Music toModel(MusicEntity music) {
+    public static Music fromEntyityl(MusicEntity music) {
         Music model = new Music();
         model.setId(music.getId());
         model.setSongname(music.getSongname());

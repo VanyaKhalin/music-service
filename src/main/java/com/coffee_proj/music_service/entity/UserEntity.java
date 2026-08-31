@@ -49,6 +49,4 @@ public class UserEntity {
     public Long getId() {
         return id;
     }
-
-
 }

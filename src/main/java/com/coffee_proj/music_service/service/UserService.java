@@ -1,16 +1,12 @@
 package com.coffee_proj.music_service.service;
 
 import com.coffee_proj.music_service.entity.UserEntity;
-import com.coffee_proj.music_service.exception.UserAlreadyExistExceprion;
+import com.coffee_proj.music_service.exception.UserAlreadyExistException;
 import com.coffee_proj.music_service.exception.UserNotFoundException;
 import com.coffee_proj.music_service.model.User;
 import com.coffee_proj.music_service.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -21,10 +17,9 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-
-    public UserEntity registration(UserEntity user) throws UserAlreadyExistExceprion {
+    public UserEntity registration(UserEntity user) throws UserAlreadyExistException {
         if (userRepo.findByUsername(user.getUsername()) != null) {
-            throw new UserAlreadyExistExceprion("Пользователь с таким именем уже существует");
+            throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
         }
         return userRepo.save(user);
     }
@@ -32,12 +27,16 @@ public class UserService {
     public User getOne(Long id) throws UserNotFoundException {
         Optional<UserEntity> user = userRepo.findById(id);
         if(user.isEmpty()) {
-            throw new UserNotFoundException("Пользователь не найден");
+            throw new UserNotFoundException("Пользователь с таким id не найден");
         }
-        return User.toModel(user.get());
+        return User.fromEntyity(user.get());
     }
 
-    public Long delete(Long id) {
+    public Long delete(Long id) throws UserNotFoundException {
+        Optional<UserEntity> userOpt = userRepo.findById(id);
+        if (userOpt.isEmpty()) {
+            throw new UserNotFoundException("Пользователь с таким Id не найден");
+        }
         userRepo.deleteById(id);
         return id;
     }

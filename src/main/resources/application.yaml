@@ -3,6 +3,6 @@ spring:
     name: music-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/music
-    username: root
-    password: 2242
+    url: {DB_URL:jdbc:postgresql://localhost:5432/music}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:2242}

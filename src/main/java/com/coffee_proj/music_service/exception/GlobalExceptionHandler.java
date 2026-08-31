@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserAlreadyExistExceprion.class)
-    public ResponseEntity handleUserAlreadyExist(UserAlreadyExistExceprion e) {
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity handleUserAlreadyExist(UserAlreadyExistException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
@@ -20,6 +20,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity handleUserNotFoundException(UserNotFoundException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(MusicNotFoundException.class)
+    public ResponseEntity handleMusicNotFoundException(MusicNotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 }

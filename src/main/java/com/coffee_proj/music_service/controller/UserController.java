@@ -1,7 +1,7 @@
 package com.coffee_proj.music_service.controller;
 
 import com.coffee_proj.music_service.entity.UserEntity;
-import com.coffee_proj.music_service.exception.UserAlreadyExistExceprion;
+import com.coffee_proj.music_service.exception.UserAlreadyExistException;
 import com.coffee_proj.music_service.exception.UserNotFoundException;
 import com.coffee_proj.music_service.repository.UserRepo;
 import com.coffee_proj.music_service.service.UserService;
@@ -18,9 +18,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity registration(@RequestBody UserEntity user) throws UserAlreadyExistExceprion {
+    public ResponseEntity registration(@RequestBody UserEntity user) throws UserAlreadyExistException {
         userService.registration(user);
-        return ResponseEntity.ok("клиент успешно сохранен");
+        return ResponseEntity.status(201).body("клиент успешно сохранен");
     }
 
     @GetMapping
@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.delete(id));
+    public ResponseEntity deleteUser(@PathVariable Long id) throws UserNotFoundException {
+        return ResponseEntity.status(204).body(userService.delete(id));
     }
 }
