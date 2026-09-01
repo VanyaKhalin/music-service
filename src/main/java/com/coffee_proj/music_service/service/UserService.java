@@ -9,6 +9,7 @@ import com.coffee_proj.music_service.model.User;
 import com.coffee_proj.music_service.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -18,7 +19,8 @@ public class UserService {
     private final UserRepo userRepo;
 
     public UserEntity registration(UserDto userDto) throws UserAlreadyExistException {
-        UserEntity user = new UserEntity(userDto.getUsername(), userDto.getPassword());
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        UserEntity user = new UserEntity(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole());
         if (userRepo.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
         }
@@ -61,6 +63,9 @@ public class UserService {
                 throw new PasswordIsTooShortException("Слишком короткий пароль: минимум 4 символа");
             }
             user.setPassword(userDto.getPassword());
+        }
+        if (userDto.getRole() != null) {
+            user.setRole(userDto.getRole());
         }
         return User.fromEntyity(userRepo.save(user));
     }

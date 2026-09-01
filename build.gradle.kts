@@ -25,6 +25,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
 
     runtimeOnly("org.postgresql:postgresql")
+    implementation("org.springframework.security:spring-security-crypto")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

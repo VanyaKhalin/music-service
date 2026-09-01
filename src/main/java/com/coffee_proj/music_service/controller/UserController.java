@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity updateUsername(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException, UserAlreadyExistException, PasswordIsTooShortException {
+    public ResponseEntity updateUser(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException, UserAlreadyExistException, PasswordIsTooShortException {
         return ResponseEntity.status(200).body(userService.updateUsername(id, userDto));
     }
 

@@ -6,10 +6,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JsonPropertyOrder({"id", "username", "music"})
+@JsonPropertyOrder({"id", "username", "role", "music"})
 public class User {
     private Long id;
     private String username;
+    private String role;
     private List<Music> music;
 
     public User() {
@@ -19,6 +20,7 @@ public class User {
         User model = new User();
         model.setId(user.getId());
         model.setUsername(user.getUsername());
+        model.setRole(user.getRole());
         model.setMusic(user.getUsersMusic().stream().map(Music::fromEntyityl).collect(Collectors.toList()));
         return model;
     }
@@ -45,5 +47,13 @@ public class User {
 
     public void setMusic(List<Music> music) {
         this.music = music;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
