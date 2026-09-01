@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity handleMusicNotFoundException(MusicNotFoundException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
+    @ExceptionHandler(PasswordIsTooShortException.class)
+    public ResponseEntity handlePasswordIsTooShortException(PasswordIsTooShortException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }

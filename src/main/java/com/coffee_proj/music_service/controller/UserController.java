@@ -1,13 +1,12 @@
 package com.coffee_proj.music_service.controller;
 
-import com.coffee_proj.music_service.entity.UserEntity;
+import com.coffee_proj.music_service.controller.dto.UserDto;
+import com.coffee_proj.music_service.exception.PasswordIsTooShortException;
 import com.coffee_proj.music_service.exception.UserAlreadyExistException;
 import com.coffee_proj.music_service.exception.UserNotFoundException;
-import com.coffee_proj.music_service.repository.UserRepo;
-import com.coffee_proj.music_service.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.coffee_proj.music_service.service.UserService;
 
 @RestController
 @RequestMapping("/users")
@@ -18,8 +17,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity registration(@RequestBody UserEntity user) throws UserAlreadyExistException {
-        userService.registration(user);
+    public ResponseEntity registration(@RequestBody UserDto userDto) throws UserAlreadyExistException {
+        userService.registration(userDto);
         return ResponseEntity.status(201).body("клиент успешно сохранен");
     }
 
@@ -32,4 +31,10 @@ public class UserController {
     public ResponseEntity deleteUser(@PathVariable Long id) throws UserNotFoundException {
         return ResponseEntity.status(204).body(userService.delete(id));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity updateUsername(@PathVariable Long id, @RequestBody UserDto userDto) throws UserNotFoundException, UserAlreadyExistException, PasswordIsTooShortException {
+        return ResponseEntity.status(200).body(userService.updateUsername(id, userDto));
+    }
+
 }

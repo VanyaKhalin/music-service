@@ -1,23 +1,24 @@
 package com.coffee_proj.music_service.service;
 
+import com.coffee_proj.music_service.controller.dto.UserDto;
 import com.coffee_proj.music_service.entity.UserEntity;
+import com.coffee_proj.music_service.exception.PasswordIsTooShortException;
 import com.coffee_proj.music_service.exception.UserAlreadyExistException;
 import com.coffee_proj.music_service.exception.UserNotFoundException;
 import com.coffee_proj.music_service.model.User;
 import com.coffee_proj.music_service.repository.UserRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
 
-    public UserService(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
-
-    public UserEntity registration(UserEntity user) throws UserAlreadyExistException {
+    public UserEntity registration(UserDto userDto) throws UserAlreadyExistException {
+        UserEntity user = new UserEntity(userDto.getUsername(), userDto.getPassword());
         if (userRepo.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
         }
@@ -40,4 +41,28 @@ public class UserService {
         userRepo.deleteById(id);
         return id;
     }
+
+    public User updateUsername(Long id, UserDto userDto) throws UserNotFoundException, UserAlreadyExistException, PasswordIsTooShortException {
+        Optional<UserEntity> userOpt = userRepo.findById(id);
+        if (userOpt.isEmpty()) {
+            throw new UserNotFoundException("Пользователь не найден");
+        }
+        UserEntity user = userOpt.get();
+
+        if (userDto.getUsername() != null) {
+            UserEntity otherUser = userRepo.findByUsername(userDto.getUsername());
+            if (otherUser != null && !otherUser.getId().equals(id)) {
+                throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
+            }
+            user.setUsername(userDto.getUsername());
+        }
+        if (userDto.getPassword() != null) {
+            if (userDto.getPassword().length() < 4) {
+                throw new PasswordIsTooShortException("Слишком короткий пароль: минимум 4 символа");
+            }
+            user.setPassword(userDto.getPassword());
+        }
+        return User.fromEntyity(userRepo.save(user));
+    }
+
 }
