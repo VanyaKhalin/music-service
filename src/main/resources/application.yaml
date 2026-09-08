@@ -6,3 +6,7 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/music}
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:2242}
+
+jwt:
+  secret: ${JWT_SECRET:Q7m2K9v4X8p1R6t3N5z0L2c7B4y8W1s6}
+  expirationTime: ${JWT_EXPIRATION:3600000}

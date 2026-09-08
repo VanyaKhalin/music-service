@@ -16,7 +16,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity registration(@RequestBody UserDto userDto) throws UserAlreadyExistException {
         userService.registration(userDto);
         return ResponseEntity.status(201).body("клиент успешно сохранен");

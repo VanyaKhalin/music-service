@@ -8,22 +8,27 @@ import com.coffee_proj.music_service.exception.UserNotFoundException;
 import com.coffee_proj.music_service.model.User;
 import com.coffee_proj.music_service.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public UserEntity registration(UserDto userDto) throws UserAlreadyExistException {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        UserEntity user = new UserEntity(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole());
-        if (userRepo.findByUsername(user.getUsername()) != null) {
+        if (userRepo.findByUsername(userDto.getUsername()) != null) {
             throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
         }
+        UserEntity user = new UserEntity(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole());
         return userRepo.save(user);
     }
 

@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity handlePasswordIsTooShortException(PasswordIsTooShortException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public ResponseEntity handleIncorrectPasswordException(IncorrectPasswordException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
 }
