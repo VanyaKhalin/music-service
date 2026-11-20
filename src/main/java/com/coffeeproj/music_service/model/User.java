@@ -21,7 +21,7 @@ public class User {
         model.setId(user.getId());
         model.setUsername(user.getUsername());
         model.setRole(user.getRole());
-        model.setMusic(user.getUsersMusic().stream().map(Music::fromEntyityl).collect(Collectors.toList()));
+        model.setMusic(user.getUsersMusic().stream().map(Music::fromEntyity).collect(Collectors.toList()));
         return model;
     }
 

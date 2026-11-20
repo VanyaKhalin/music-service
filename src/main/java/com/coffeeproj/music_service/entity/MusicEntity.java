@@ -2,6 +2,8 @@ package com.coffeeproj.music_service.entity;
 
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "songs")
 public class MusicEntity {
@@ -12,8 +14,22 @@ public class MusicEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+    private String objectKey;
 
-    public MusicEntity() {
+    public MusicEntity(){}
+
+    public MusicEntity(String songname, UserEntity user) {
+        this.songname = songname;
+        this.user = user;
+        this.objectKey = "songs/" + UUID.randomUUID();
+    }
+
+    public String getObjectKey() {
+        return objectKey;
+    }
+
+    public void setObjectKey(String objectKey) {
+        this.objectKey = objectKey;
     }
 
     public Long getId() {

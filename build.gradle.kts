@@ -31,7 +31,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")
 
     implementation("org.springframework.security:spring-security-crypto")
-
+    implementation("io.minio:minio:9.0.4")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok")

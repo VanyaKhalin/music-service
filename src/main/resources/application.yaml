@@ -7,6 +7,12 @@ spring:
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:2242}
 
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:root}
+  secret-key: ${MINIO_SECRET_KEY:local-minio-password}
+  bucket: ${MINIO_BUCKET:musicfiles}
+
 jwt:
   secret: ${JWT_SECRET:Q7m2K9v4X8p1R6t3N5z0L2c7B4y8W1s6}
   expirationTime: ${JWT_EXPIRATION:3600000}
