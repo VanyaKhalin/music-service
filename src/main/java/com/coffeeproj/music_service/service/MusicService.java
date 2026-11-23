@@ -36,7 +36,6 @@ public class MusicService {
     public String createMusic(MusicDto musicDto, Long userId) throws UserNotFoundException, MinioException {
         UserEntity user = userRepo.findById(userId).get();
         MusicEntity music = new MusicEntity(musicDto.getName(), user);
-        //music.setUser(user);
         String url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                 .method(Http.Method.PUT)
                 .bucket(bucketName)
@@ -48,12 +47,15 @@ public class MusicService {
     }
 
     public String getMusic(long id, long userId) throws UserNotFoundException, MinioException, MusicNotFoundException {
-        UserEntity user = userRepo.findById(userId).get();
         Optional<MusicEntity> musicOpt = musicRepo.findById(id);
         if (musicOpt.isEmpty()) {
             throw new MusicNotFoundException("Песни с таким Id не существует");
         }
         MusicEntity music = musicOpt.get();
+
+        if (!music.getUser().getId().equals(userId)) {
+            throw new MusicNotFoundException("Песни с таким Id не найдено");
+        }
 
         return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                 .method(Http.Method.GET)
@@ -64,12 +66,16 @@ public class MusicService {
     }
 
     public String deleteMusic(long id, long userId) throws MusicNotFoundException, MinioException {
-        UserEntity user = userRepo.findById(userId).get();
         Optional<MusicEntity> musicOpt = musicRepo.findById(id);
         if (musicOpt.isEmpty()) {
             throw new MusicNotFoundException("Песни с таким Id не существует");
         }
         MusicEntity music = musicOpt.get();
+
+        if (!music.getUser().getId().equals(userId)) {
+            throw new MusicNotFoundException("Песни с таким Id не найдеа");
+        }
+
         musicRepo.deleteById(id);
         return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                         .method(Http.Method.DELETE)
@@ -78,4 +84,24 @@ public class MusicService {
                         .expiry(1, TimeUnit.DAYS)
                         .build());
     }
+
+    public String replaceMusic(long id, long userId) throws MusicNotFoundException, MinioException {
+        Optional<MusicEntity> musicOpt = musicRepo.findById(id);
+        if (musicOpt.isEmpty()) {
+            throw new MusicNotFoundException("Песни с таким Id не существует");
+        }
+
+        MusicEntity music = musicOpt.get();
+        if (!music.getUser().getId().equals(userId)) {
+            throw new MusicNotFoundException("Песни с таким Id не найдеа");
+        }
+
+        return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                        .method(Http.Method.PUT)
+                        .bucket(bucketName)
+                        .object(music.getObjectKey())
+                        .expiry(1, TimeUnit.DAYS)
+                        .build());
+    }
+
 }

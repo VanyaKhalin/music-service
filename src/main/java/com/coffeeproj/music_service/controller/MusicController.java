@@ -20,7 +20,8 @@ public class MusicController {
 
     @PostMapping
     public ResponseEntity createMusic(@RequestBody MusicDto musicDto,
-                                      @RequestAttribute("authUserDto")AuthUserDto authUserDto) throws UserNotFoundException, MinioException {
+                                      @RequestAttribute("authUserDto")AuthUserDto authUserDto)
+                                        throws UserNotFoundException, MinioException {
         return ResponseEntity.status(201).body(musicService.createMusic(musicDto, authUserDto.getId()));
     }
 
@@ -35,4 +36,12 @@ public class MusicController {
             throws MusicNotFoundException, MinioException {
         return ResponseEntity.status(200).body(musicService.deleteMusic(id, authUserDto.getId()));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity replaceMusic(@PathVariable long id, @RequestAttribute("authUserDto") AuthUserDto authUserDto)
+            throws MusicNotFoundException, MinioException {
+        return ResponseEntity.status(200).body(musicService.replaceMusic(id, authUserDto.getId()));
+    }
+
+
 }
