@@ -26,7 +26,7 @@ public class UserService {
         if (userRepo.findByUsername(userDto.getUsername()) != null) {
             throw new UserAlreadyExistException("Пользователь с таким именем уже существует");
         }
-        UserEntity user = new UserEntity(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()), userDto.getRole());
+        UserEntity user = new UserEntity(userDto.getUsername(), passwordEncoder.encode(userDto.getPassword()));
         return userRepo.save(user);
     }
 
@@ -67,9 +67,7 @@ public class UserService {
             }
             user.setPassword(userDto.getPassword());
         }
-        if (userDto.getRole() != null) {
-            user.setRole(userDto.getRole());
-        }
+
         return User.fromEntyity(userRepo.save(user));
     }
 }

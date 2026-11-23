@@ -8,9 +8,7 @@ import com.coffeeproj.music_service.exception.UserNotFoundException;
 import com.coffeeproj.music_service.model.Music;
 import com.coffeeproj.music_service.repository.MusicRepo;
 import com.coffeeproj.music_service.repository.UserRepo;
-import io.minio.GetPresignedObjectUrlArgs;
-import io.minio.Http;
-import io.minio.MinioClient;
+import io.minio.*;
 import io.minio.errors.MinioException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,12 +75,12 @@ public class MusicService {
         }
 
         musicRepo.deleteById(id);
-        return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                        .method(Http.Method.DELETE)
-                        .bucket(bucketName)
-                        .object(music.getObjectKey())
-                        .expiry(1, TimeUnit.DAYS)
-                        .build());
+        minioClient.removeObject(RemoveObjectArgs.builder()
+                .bucket(bucketName)
+                .object(music.getObjectKey())
+                .build());
+
+        return "Песня удалена";
     }
 
     public String replaceMusic(long id, long userId) throws MusicNotFoundException, MinioException {

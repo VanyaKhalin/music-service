@@ -19,10 +19,10 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(String username, String password, String role) {
+    public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
+        this.role = "USER";
     }
 
     public String getUsername() {
