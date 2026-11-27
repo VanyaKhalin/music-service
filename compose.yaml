@@ -9,10 +9,15 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+      - minio
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/music
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=2242
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=root
+      - MINIO_SECRET_KEY=local-minio-password
+      - MINIO_BUCKET=musicfiles
 
   postgres:
     image: 'postgres:18.4'
@@ -25,3 +30,15 @@ services:
       - 5432:5432
     volumes:
       - ./postgres_data:/var/lib/postgresql
+
+  minio:
+    image: cgr.dev/chainguard/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=root
+      - MINIO_ROOT_PASSWORD=local-minio-password
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./minio_data:/data
